@@ -1,0 +1,23 @@
+﻿<Window x:Class="CodeRebootWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="КОД: ПЕРЕЗАГРУЗКА" Height="650" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#1a1a1a">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Background="#2c3e50" Orientation="Horizontal" Margin="5" Height="40">
+            <TextBlock x:Name="DoorStatusText" Text="Exit_Door.Locked = true" Foreground="White" Margin="10" VerticalAlignment="Center"/>
+            <TextBlock x:Name="PowerStatusText" Text="Энергия: 0" Foreground="White" Margin="10" VerticalAlignment="Center"/>
+            <TextBlock x:Name="GeneratorStatusText" Text="Генератор: выкл" Foreground="White" Margin="10" VerticalAlignment="Center"/>
+            <TextBlock x:Name="CodeStatusText" Text="Door Code: ???" Foreground="White" Margin="10" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <Canvas Grid.Row="1" x:Name="GameCanvas" Background="#0a0a0a" Focusable="True"
+                KeyDown="GameCanvas_KeyDown"/>
+    </Grid>
+</Window>
