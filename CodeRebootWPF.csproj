@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TerminalEditorWindow.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,6 +64,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameObject.cs" />
+    <Compile Include="MainWindow.GameLoop.cs" />
+    <Compile Include="MainWindow.Input.cs" />
+    <Compile Include="MainWindow.Interaction.cs" />
+    <Compile Include="MainWindow.Levels.cs" />
+    <Compile Include="MainWindow.Variables.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -93,6 +100,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\door_closed.png" />
+    <Resource Include="images\door_open.png" />
+    <Resource Include="images\generator.png" />
+    <Resource Include="images\robot.png" />
+    <Resource Include="images\room.png" />
+    <Resource Include="images\terminal_off.png" />
+    <Resource Include="images\terminal_on.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
