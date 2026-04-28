@@ -1,4 +1,4 @@
-﻿namespace CodeRebootWPF
+namespace CodeRebootWPF
 {
     public class GameObject
     {
