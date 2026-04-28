@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CodeRebootWPF
@@ -9,9 +10,7 @@ namespace CodeRebootWPF
 
         private void GameCanvas_KeyDown(object sender, KeyEventArgs e)
         {
-            if (IsTerminalOpen)
-                return;
-
+            if (IsTerminalOpen) return;
             switch (e.Key)
             {
                 case Key.W: case Key.Up: moveUp = true; break;
@@ -20,17 +19,13 @@ namespace CodeRebootWPF
                 case Key.D: case Key.Right: moveRight = true; break;
                 case Key.E: case Key.Enter: Interact(); break;
                 case Key.F4: ToggleFullScreen(); break;
-                case Key.Escape:
-                    if (!escPressed) { escPressed = true; escPressStartTime = DateTime.Now; }
-                    break;
+                case Key.Escape: if (!escPressed) { escPressed = true; escPressStartTime = DateTime.Now; } break;
             }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            if (IsTerminalOpen)
-                return;
-
+            if (IsTerminalOpen) return;
             switch (e.Key)
             {
                 case Key.W: case Key.Up: moveUp = false; break;
@@ -44,17 +39,28 @@ namespace CodeRebootWPF
 
         private void ToggleFullScreen()
         {
-            if (this.WindowState == System.Windows.WindowState.Normal)
+            if (this.WindowStyle == WindowStyle.None)
             {
-                this.WindowState = System.Windows.WindowState.Maximized;
-                this.WindowStyle = System.Windows.WindowStyle.None;
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                this.ResizeMode = ResizeMode.CanResize;
+                this.Width = 1024;
+                this.Height = 768;
+                this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+                this.Top = (SystemParameters.PrimaryScreenHeight - this.Height) / 2;
             }
             else
             {
-                this.WindowState = System.Windows.WindowState.Normal;
-                this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize;
+                this.Left = 0;
+                this.Top = 0;
+                this.Width = SystemParameters.PrimaryScreenWidth;
+                this.Height = SystemParameters.PrimaryScreenHeight;
             }
-            // камера не используется
+            UpdateLayout(); // ВАЖНО: пересчитать макет
+            CenterRoom();   // ВАЖНО: центрировать комнату
         }
     }
 }
