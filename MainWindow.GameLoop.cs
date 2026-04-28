@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,6 +9,8 @@ namespace CodeRebootWPF
     {
         private void GameLoop(object sender, EventArgs e)
         {
+            if (player == null) return;
+
             double newX = playerX;
             double newY = playerY;
             if (moveUp) newY -= playerSpeed;
@@ -16,7 +18,6 @@ namespace CodeRebootWPF
             if (moveLeft) newX -= playerSpeed;
             if (moveRight) newX += playerSpeed;
 
-            // Хитбокс 40x40 по центру спрайта 150x150
             double hitboxX = newX + (150 - 40) / 2;
             double hitboxY = newY + (150 - 40) / 2;
             Rect newRect = new Rect(hitboxX, hitboxY, 40, 40);
@@ -34,6 +35,31 @@ namespace CodeRebootWPF
             Canvas.SetLeft(player, playerX);
             Canvas.SetTop(player, playerY);
 
+            // 🔧 ЛОГИКА АНИМАЦИИ
+            bool isMoving = moveUp || moveDown || moveLeft || moveRight;
+
+            if (isMoving)
+            {
+                // Определяем направление
+                if (moveUp) currentDirection = "up";
+                else if (moveDown) currentDirection = "down";
+                else if (moveLeft) currentDirection = "left";
+                else if (moveRight) currentDirection = "right";
+
+                animCounter++;
+                // Меняем кадр только когда счетчик превысил порог AnimSpeed
+                int frame = (animCounter / AnimSpeed) % 2;
+                player.Source = playerSprites[$"{currentDirection}_walk{frame + 1}"];
+            }
+            else
+            {
+                animCounter = 0;
+                // Возвращаем спрайт покоя
+                player.Source = currentDirection == "down"
+                    ? playerSprites["down_stay"]
+                    : playerSprites[$"{currentDirection}_stay"];
+            }
+
             CheckInteraction();
             UpdateUI();
 
@@ -50,6 +76,12 @@ namespace CodeRebootWPF
             GeneratorStatusText.Text = $"Генератор: {(generatorActive ? "вкл" : "выкл")}";
             if (currentLevel == 2)
                 CodeStatusText.Text = $"Door Code: {doorCode}";
+            else if (currentLevel == 3)
+                CodeStatusText.Text = $"Activation Code: {activationCode}";
+            else if (currentLevel == 4)
+                CodeStatusText.Text = $"Переключений: {generatorToggles}/5";
+            else if (currentLevel == 5)
+                CodeStatusText.Text = $"Части кода: {(hasPiece1 ? "✓" : "□")} {(hasPiece2 ? "✓" : "□")}";
             else
                 CodeStatusText.Text = "";
         }
