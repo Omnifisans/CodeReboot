@@ -1,23 +1,56 @@
 <Window x:Class="CodeRebootWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="КОД: ПЕРЕЗАГРУЗКА" Height="650" Width="800"
+        Title="Code: Reboot - Game" 
+        Width="1024" 
+        Height="768"
         WindowStartupLocation="CenterScreen"
-        Background="#1a1a1a">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        WindowStyle="None"
+        AllowsTransparency="False"
+        Background="Black"
+        ResizeMode="NoResize">
 
-        <StackPanel Grid.Row="0" Background="#2c3e50" Orientation="Horizontal" Margin="5" Height="40">
-            <TextBlock x:Name="DoorStatusText" Text="Exit_Door.Locked = true" Foreground="White" Margin="10" VerticalAlignment="Center"/>
-            <TextBlock x:Name="PowerStatusText" Text="Энергия: 0" Foreground="White" Margin="10" VerticalAlignment="Center"/>
-            <TextBlock x:Name="GeneratorStatusText" Text="Генератор: выкл" Foreground="White" Margin="10" VerticalAlignment="Center"/>
-            <TextBlock x:Name="CodeStatusText" Text="" Foreground="White" Margin="10" VerticalAlignment="Center"/>
-        </StackPanel>
+    <Grid x:Name="MainGrid">
+        <!-- Canvas для игрового мира -->
+        <Canvas x:Name="GameCanvas" 
+                Width="800" 
+                Height="600"
+                Background="Transparent"
+                Focusable="True"
+                KeyDown="GameCanvas_KeyDown">
+        </Canvas>
 
-        <Canvas Grid.Row="1" x:Name="GameCanvas" Background="#0a0a0a" Focusable="True"
-                KeyDown="GameCanvas_KeyDown"/>
+        <!-- UI слой (поверх игры, без трансформации) -->
+        <Grid x:Name="UILayer" 
+              IsHitTestVisible="False"
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Top"
+              Margin="10,10,0,0">
+            <StackPanel>
+                <TextBlock x:Name="DoorStatusText" 
+                           Foreground="White"
+                           FontFamily="Consolas"
+                           FontSize="14"
+                           Margin="0,0,0,2"/>
+
+                <TextBlock x:Name="PowerStatusText" 
+                           Foreground="White"
+                           FontFamily="Consolas"
+                           FontSize="14"
+                           Margin="0,0,0,2"/>
+
+                <TextBlock x:Name="GeneratorStatusText" 
+                           Foreground="White"
+                           FontFamily="Consolas"
+                           FontSize="14"
+                           Margin="0,0,0,2"/>
+
+                <TextBlock x:Name="CodeStatusText" 
+                           Foreground="White"
+                           FontFamily="Consolas"
+                           FontSize="14"
+                           Margin="0,0,0,2"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
