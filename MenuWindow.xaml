@@ -1,0 +1,165 @@
+﻿<Window x:Class="CodeRebootWPF.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Code: Reboot - Main Menu" 
+        Width="1024" 
+        Height="768"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        Background="Black"
+        ResizeMode="NoResize"
+        KeyDown="Window_KeyDown">
+
+    <Grid>
+        <Image Source="pack://application:,,,/images/menu_background.png" 
+                Stretch="UniformToFill" />
+
+        <StackPanel VerticalAlignment="Center" 
+                    HorizontalAlignment="Center" 
+                    Orientation="Vertical"
+                    Margin="0,-50,0,0">
+
+            <!-- Кнопка: Начать игру -->
+            <Button x:Name="btnStart" 
+                    Content="Начать игру"
+                    Width="300" 
+                    Height="60"
+                    Margin="0,10"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="24"
+                    FontFamily="Consolas"
+                    Cursor="Hand"
+                    Click="BtnStart_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="textBlock"
+                                   Text="{TemplateBinding Content}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="textBlock" Property="Foreground" Value="#00FF00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.RenderTransform>
+                    <ScaleTransform x:Name="startScale" ScaleX="1" ScaleY="1"/>
+                </Button.RenderTransform>
+            </Button>
+
+            <!--  КНОПКА: Продолжить (ИСПРАВЛЕНО: добавлен Click и Cursor) -->
+            <Button x:Name="btnContinue" 
+                    Content="Продолжить игру"
+                    Width="300" 
+                    Height="60"
+                    Margin="0,10"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="Gray"
+                    FontSize="24"
+                    FontFamily="Consolas"
+                    IsEnabled="False" 
+                    Cursor="Hand"
+                    Click="BtnContinue_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="textBlock"
+                                   Text="{TemplateBinding Content}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <!-- Эффект только если кнопка включена -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <!-- Проверка не нужна, триггер сам работает -->
+                                <Setter TargetName="textBlock" Property="Foreground" Value="#00FF00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.RenderTransform>
+                    <ScaleTransform x:Name="continueScale" ScaleX="1" ScaleY="1"/>
+                </Button.RenderTransform>
+            </Button>
+
+            <!-- Кнопка: Управление -->
+            <Button x:Name="btnControls" 
+                    Content="Управление"
+                    Width="300" 
+                    Height="60"
+                    Margin="0,10"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="24"
+                    FontFamily="Consolas"
+                    Cursor="Hand"
+                    Click="BtnControls_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="textBlock"
+                                   Text="{TemplateBinding Content}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="textBlock" Property="Foreground" Value="#00FF00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.RenderTransform>
+                    <ScaleTransform x:Name="controlsScale" ScaleX="1" ScaleY="1"/>
+                </Button.RenderTransform>
+            </Button>
+
+            <!-- Кнопка: Выйти -->
+            <Button x:Name="btnExit" 
+                    Content="Выйти"
+                    Width="300" 
+                    Height="60"
+                    Margin="0,10"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="24"
+                    FontFamily="Consolas"
+                    Cursor="Hand"
+                    Click="BtnExit_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="textBlock"
+                                   Text="{TemplateBinding Content}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="textBlock" Property="Foreground" Value="#00FF00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.RenderTransform>
+                    <ScaleTransform x:Name="exitScale" ScaleX="1" ScaleY="1"/>
+                </Button.RenderTransform>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+</Window>
