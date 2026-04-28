@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,6 +37,21 @@ namespace CodeRebootWPF
                 variables.Add(new VariableInfo { Name = "exitDoorLocked", Type = "bool" });
                 variables.Add(new VariableInfo { Name = "doorCode", Type = "int" });
             }
+            else if (level == 3)
+            {
+                variables.Add(new VariableInfo { Name = "activationCode", Type = "string" });
+            }
+            else if (level == 4)
+            {
+                variables.Add(new VariableInfo { Name = "exitDoorLocked", Type = "bool" });
+            }
+            else if (level == 5)
+            {
+                if (mainWindow.GetHasPiece1() && mainWindow.GetHasPiece2())
+                    variables.Add(new VariableInfo { Name = "exitDoorLocked", Type = "bool" });
+                else
+                    variables.Add(new VariableInfo { Name = "Сначала найдите части кода", Type = "none" });
+            }
 
             panel = new StackPanel { Margin = new Thickness(10) };
             Content = panel;
@@ -60,10 +75,12 @@ namespace CodeRebootWPF
                 object currentValue = null;
                 if (varInfo.Name == "exitDoorLocked") currentValue = mainWindow.GetExitDoorLocked();
                 else if (varInfo.Name == "doorCode") currentValue = mainWindow.GetDoorCode();
+                else if (varInfo.Name == "activationCode") currentValue = mainWindow.GetActivationCode();
+                else if (varInfo.Name == "Сначала найдите части кода") currentValue = "";
 
                 var tb = new TextBlock
                 {
-                    Text = $"{varInfo.Name} ({varInfo.Type}) = {currentValue}",
+                    Text = varInfo.Type == "none" ? varInfo.Name : $"{varInfo.Name} ({varInfo.Type}) = {currentValue}",
                     Margin = new Thickness(0, 2, 0, 2),
                     Padding = new Thickness(2)
                 };
@@ -156,6 +173,17 @@ namespace CodeRebootWPF
                     else
                         MessageBox.Show("Ошибка: введите целое число", "Неверное значение");
                 }
+                else if (currentVarType == "string")
+                {
+                    string newValue = input.Trim();
+                    mainWindow.SetActivationCode(newValue);
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Эта переменная не редактируется", "Ошибка");
+                }
             }
             catch (Exception ex) { MessageBox.Show("Ошибка: " + ex.Message); }
         }
@@ -179,10 +207,22 @@ namespace CodeRebootWPF
                 else if (e.Key == Key.Enter)
                 {
                     var selected = variables[selectedIndex];
+                    if (selected.Type == "none")
+                    {
+                        MessageBox.Show("Сначала выполните условия уровня", "Нет доступа");
+                        return;
+                    }
                     object val = null;
                     if (selected.Name == "exitDoorLocked") val = mainWindow.GetExitDoorLocked();
                     else if (selected.Name == "doorCode") val = mainWindow.GetDoorCode();
+                    else if (selected.Name == "activationCode") val = mainWindow.GetActivationCode();
                     ShowEditPanel(selected.Name, selected.Type, val);
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Escape)
+                {
+                    DialogResult = false;
+                    Close();
                     e.Handled = true;
                 }
             }
