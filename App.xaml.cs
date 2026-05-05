@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 
@@ -6,31 +7,52 @@ namespace CodeRebootWPF
 {
     public partial class App : Application
     {
-        // Глобальный плеер, доступный из любой части игры
-        public static MediaPlayer GlobalMusicPlayer { get; private set; }
+        public static readonly MediaPlayer BgmPlayer = new MediaPlayer();
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            // 1. Инициализация музыки
-            GlobalMusicPlayer = new MediaPlayer();
-
-            // Путь к файлу (настроен в .csproj для копирования в папку music)
-            GlobalMusicPlayer.Open(new Uri("music/background_levels_music.MP3", UriKind.Relative));
-
-            // 2. Зацикливание: когда трек заканчивается, сбрасываем на 0 и играем снова
-            GlobalMusicPlayer.MediaEnded += (s, args) =>
+            try
             {
-                GlobalMusicPlayer.Position = TimeSpan.Zero;
-                GlobalMusicPlayer.Play();
-            };
+                // 1. Получаем встроенный ресурс из EXE
+                var resourceUri = new Uri("pack://application:,,,/music/background_levels_music.MP3");
+                var streamInfo = Application.GetResourceStream(resourceUri);
 
-            // 3. Настройка и запуск
-            GlobalMusicPlayer.Volume = 0.3; // Громкость 30%
-            GlobalMusicPlayer.Play();
+                if (streamInfo == null)
+                {
+                    MessageBox.Show("Музыка не найдена в ресурсах!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    new MenuWindow().Show();
+                    return;
+                }
 
-            // 4. Запуск главного меню вручную
+                // 2. Копируем во временную папку (MediaPlayer не играет из pack://)
+                string tempMusicPath = Path.Combine(Path.GetTempPath(), "CodeReboot_Music.mp3");
+                using (var reader = streamInfo.Stream)
+                using (var writer = new FileStream(tempMusicPath, FileMode.Create))
+                {
+                    reader.CopyTo(writer);
+                }
+
+                // 3. Запускаем воспроизведение
+                BgmPlayer.Open(new Uri(tempMusicPath));
+                BgmPlayer.Volume = 0.5;
+
+                // Зацикливание
+                BgmPlayer.MediaEnded += (s, args) =>
+                {
+                    BgmPlayer.Position = TimeSpan.Zero;
+                    BgmPlayer.Play();
+                };
+
+                BgmPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                // Если музыка не загрузилась — игра всё равно запустится
+                System.Diagnostics.Debug.WriteLine("Music error: " + ex.Message);
+            }
+
             new MenuWindow().Show();
         }
     }
