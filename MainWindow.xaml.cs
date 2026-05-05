@@ -8,15 +8,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
-
 namespace CodeRebootWPF
 {
     public partial class MainWindow : Window
     {
+        // Игрок
         private Image player;
         private double playerX = 200;
         private double playerY = 350;
         private double playerSpeed = 2;
+
+        // Мир
         private Canvas worldCanvas;
         private List<Rect> obstacles = new List<Rect>();
         private List<GameObject> objects = new List<GameObject>();
@@ -45,7 +47,7 @@ namespace CodeRebootWPF
         private Image roomBg;
         private TranslateTransform roomTransform;
 
-        // Анимация
+        // Анимация 
         private Dictionary<string, BitmapImage> playerSprites = new Dictionary<string, BitmapImage>();
         private int animCounter = 0;
         private const int AnimSpeed = 40;
@@ -60,6 +62,24 @@ namespace CodeRebootWPF
         {
             InitializeComponent();
 
+            // Новая игра
+            currentLevel = 1;
+            exitDoorLocked = true;
+            powerLevel = 0;
+            generatorActive = false;
+            doorCode = 0;
+            activationCode = " ";
+            generatorToggles = 0;
+            generatorBroken = false;
+            hasPiece1 = false;
+            hasPiece2 = false;
+            doorSpawned = false;
+            escPressed = false;
+            IsTerminalOpen = false;
+            playerX = 200;
+            playerY = 350;
+
+            // Настройка окна
             this.WindowStyle = WindowStyle.None;
             this.WindowState = WindowState.Normal;
             this.ResizeMode = ResizeMode.NoResize;
@@ -67,9 +87,10 @@ namespace CodeRebootWPF
             this.Width = SystemParameters.PrimaryScreenWidth;
             this.Height = SystemParameters.PrimaryScreenHeight;
 
-            // Сохраняем при любом закрытии окна
+            // Сохраняем при закрытии окна
             this.Closing += (s, e) => SaveGame();
 
+            // Фон комнаты
             roomBg = new Image();
             roomBg.Source = new BitmapImage(new Uri("pack://application:,,,/images/room.png"));
             roomBg.Stretch = Stretch.None;
@@ -101,10 +122,7 @@ namespace CodeRebootWPF
             playerSprites["right_walk1"] = new BitmapImage(new Uri(Pack("robot_right_walk1.png")));
             playerSprites["right_walk2"] = new BitmapImage(new Uri(Pack("robot_right_walk2.png")));
 
-            // Загружаем только уровень и позицию
-            LoadGame();
-
-            // Загружаем уровень. LoadLevel ВСЕГДА сбрасывает головоломки.
+            // Загружаем уровень 1 (без LoadGame)
             LoadLevel(currentLevel);
             CompositionTarget.Rendering += GameLoop;
 
@@ -131,7 +149,7 @@ namespace CodeRebootWPF
             roomTransform.Y = (canvasHeight - 600) / 2;
         }
 
-        // Сохранение (только уровень и позиция)
+        // Сохранение
         private void SaveGame()
         {
             try
@@ -152,8 +170,8 @@ namespace CodeRebootWPF
             catch { }
         }
 
-        // Загрузка (только уровень и позиция)
-        private void LoadGame()
+        // Загрузка (публичный метод для кнопки "Продолжить")
+        public void LoadGame()
         {
             if (!File.Exists(SavePath)) return;
             try
@@ -167,6 +185,8 @@ namespace CodeRebootWPF
                         currentLevel = data.CurrentLevel;
                         playerX = data.PlayerX;
                         playerY = data.PlayerY;
+                        // Загружаем уровень с сохранёнными координатами
+                        LoadLevel(currentLevel);
                     }
                 }
             }
@@ -174,7 +194,7 @@ namespace CodeRebootWPF
         }
     }
 
-    // Класс сохранения (минимальный)
+    // Класс сохранения
     public class SaveData
     {
         public int CurrentLevel { get; set; } = 1;
