@@ -59,8 +59,8 @@ namespace CodeRebootWPF
                 this.Width = SystemParameters.PrimaryScreenWidth;
                 this.Height = SystemParameters.PrimaryScreenHeight;
             }
-            UpdateLayout(); // ВАЖНО: пересчитать макет
-            CenterRoom();   // ВАЖНО: центрировать комнату
+            UpdateLayout();
+            CenterRoom();
         }
     }
 }
