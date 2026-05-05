@@ -141,7 +141,7 @@ namespace CodeRebootWPF
                 {
                     string msg = "Выход закрыт.\n";
                     if (exitDoorLocked) msg += "- exitDoorLocked = true\n";
-                    if (doorCode != 42) msg += "- Неверный код (подсказка: 42)";
+                    if (doorCode != 42) msg += "- Неверный код (подсказка: Ответ на главнй фопрос жизни, вселенной и всего такого)";
                     MessageBox.Show(msg, "Выход");
                 }
             }
